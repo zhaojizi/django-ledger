@@ -56,9 +56,9 @@
                         <div class="dropdown-menu" id="dropdown-menu-{{ ce_model.uuid }}" role="menu">
                             <div class="dropdown-content">
                                 <a href="{% url 'django_ledger:customer-estimate-detail' entity_slug=entity_slug ce_pk=ce_model.uuid %}"
-                                   class="dropdown-item has-text-success">Details</a>
+                                   class="dropdown-item has-text-success">{% trans 'Details' %}</a>
                                 {#                                <a href="{% url 'django_ledger:cj-update' entity_slug=entity_slug cj_pk=cj.uuid %}"#}
-                                {#                                   class="dropdown-item has-text-warning-dark">Update</a>#}
+                                {#                                   class="dropdown-item has-text-warning-dark">{% trans 'Update' %}</a>#}
                                 {#                                {% if not cj.paid %}#}
                                 {#                                    {% modal_action cj 'get' entity_slug %}#}
                                 {#                                    <a onclick="djLedger.showModal('{{ cj.get_html_id }}')"#}

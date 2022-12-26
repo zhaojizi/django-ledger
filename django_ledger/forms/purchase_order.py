@@ -28,7 +28,7 @@ class PurchaseOrderModelCreateForm(ModelForm):
         widgets = {
             'po_title': TextInput(attrs={
                 'class': DJANGO_LEDGER_FORM_INPUT_CLASSES + ' is-large',
-                'placeholder': 'What this PO is about...'})
+                'placeholder': _('What this PO is about...')})
         }
         labels = {
             'for_inventory': _('Is this an inventory purchase?')
@@ -130,19 +130,17 @@ class PurchaseOrderItemTransactionForm(ModelForm):
             po_model: PurchaseOrderModel = getattr(self, 'PO_MODEL')
             if po_model.po_status == po_model.PO_STATUS_APPROVED:
                 if not po_item_status:
-                    raise ValidationError('Cannot assign null status to approved PO.')
+                    raise ValidationError(_('Cannot assign null status to approved PO.'))
                 if all([
                     self.instance.bill_model_id,
                     po_item_status == ItemTransactionModel.STATUS_NOT_ORDERED
                 ]):
-                    raise ValidationError('Cannot assign not ordered status to a billed item. '
-                                          'Void or delete bill first')
+                    raise ValidationError(_('Cannot assign not ordered status to a billed item.Void or delete bill first'))
             if all([
                 po_item_status in [ItemTransactionModel.STATUS_IN_TRANSIT, ItemTransactionModel.STATUS_RECEIVED],
                 not po_item_model.bill_model_id
             ]):
-                raise ValidationError(f'Cannot mark as {po_item_status.upper()}. '
-                                      'Item must be billed first.')
+                raise ValidationError(_('Cannot mark as %s.Item must be billed first.' ) % po_item_status.upper())
         return cleaned_data
 
 

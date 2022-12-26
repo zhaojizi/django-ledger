@@ -84,7 +84,7 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
                                 validators=[
                                     MinLengthValidator(limit_value=5,
                                                        message=_(
-                                                           f'PO Title must be greater than 5'))
+                                                           _('PO Title must be greater than 5')))
                                 ])
     po_status = models.CharField(max_length=10, choices=PO_STATUS, default=PO_STATUS[0][0])
     po_amount = models.DecimalField(default=0, decimal_places=2, max_digits=20, verbose_name=_('Purchase Order Amount'))
@@ -137,7 +137,7 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
 
     def __str__(self):
         # pylint: disable=no-member
-        return f'PO Model: {self.po_number} | {self.get_po_status_display()}'
+        return f'{_("PO Model:")} {self.po_number} | {self.get_po_status_display()}'
 
     # Configuration...
     def configure(self,
@@ -153,7 +153,7 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
         elif isinstance(entity_slug, EntityModel):
             entity_model = entity_slug
         else:
-            raise ValidationError('entity_slug must be an instance of str or EntityModel')
+            raise ValidationError(_('entity_slug must be an instance of str or EntityModel'))
 
         if draft_date:
             self.date_draft = draft_date
@@ -181,7 +181,7 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
                      itemtxs_qs: QuerySet = None,
                      itemtxs_list: List[ItemTransactionModel] = None) -> Union[Tuple, None]:
         if itemtxs_qs and itemtxs_list:
-            raise ValidationError('Either queryset or list can be used.')
+            raise ValidationError(_('Either queryset or list can be used.'))
 
         if itemtxs_list:
             self.po_amount = round(sum(a.po_total_amount for a in itemtxs_list if not a.is_canceled()), 2)
@@ -250,12 +250,12 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
     def can_bind_estimate(self, estimate_model, raise_exception: bool = False) -> bool:
         if self.is_contract_bound():
             if raise_exception:
-                raise ValidationError(f'PO {self.po_number} already bound to Estimate {self.ce_model.estimate_number}')
+                raise ValidationError(_('PO %s already bound to Estimate %s') % (self.po_number,self.ce_model.estimate_number))
             return False
         # check if estimate_model is passed and raise exception if needed...
         is_approved = estimate_model.is_approved()
         if not is_approved and raise_exception:
-            raise ValidationError(f'Cannot bind estimate that is not approved.')
+            raise ValidationError(_('Cannot bind estimate that is not approved.'))
         return all([
             is_approved
         ])
@@ -308,12 +308,12 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
     # REVIEW...
     def mark_as_review(self, date_review: date = None, commit: bool = False, **kwargs):
         if not self.can_review():
-            raise ValidationError(message=f'Purchase Order {self.po_number} cannot be marked as in review.')
+            raise ValidationError(message=_('Purchase Order {self.po_number} cannot be marked as in review.'))
         itemthrough_qs = self.itemtransactionmodel_set.all()
         if not itemthrough_qs.count():
-            raise ValidationError(message='Cannot review a PO without items...')
+            raise ValidationError(message=_('Cannot review a PO without items...'))
         if not self.po_amount:
-            raise ValidationError(message='PO amount is zero.')
+            raise ValidationError(message=_('PO amount is zero.'))
 
         self.date_in_review = localdate() if not date_review else date_review
         self.po_status = self.PO_STATUS_REVIEW
@@ -341,7 +341,7 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
     # APPROVED...
     def mark_as_approved(self, commit: bool = False, date_approved: date = None, **kwargs):
         if not self.can_approve():
-            raise ValidationError(message=f'Purchase Order {self.po_number} cannot be marked as approved.')
+            raise ValidationError(message=_('Purchase Order %s cannot be marked as approved.') % self.po_number)
         self.date_approved = localdate() if not date_approved else date_approved
         self.po_status = self.PO_STATUS_APPROVED
         self.clean()
@@ -410,15 +410,15 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
         bill_models = [i.bill_model for i in po_items]
         all_items_billed = all(bill_models)
         if not all_items_billed:
-            raise ValidationError('All items must be billed before PO can be fulfilled.')
+            raise ValidationError(_('All items must be billed before PO can be fulfilled.'))
 
         all_bills_paid = all(b.is_paid() for b in bill_models)
         if not all_bills_paid:
-            raise ValidationError('All Bills must be paid before PO can be fulfilled.')
+            raise ValidationError(_('All Bills must be paid before PO can be fulfilled.'))
 
         all_items_received = all(i.is_received() for i in po_items)
         if not all_items_received:
-            raise ValidationError('All items must be received before PO is fulfilled.')
+            raise ValidationError(_('All items must be received before PO is fulfilled.'))
 
         self.date_fulfilled = date_fulfilled
         self.po_status = self.PO_STATUS_FULFILLED
@@ -463,7 +463,7 @@ class PurchaseOrderModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
         bill_model_qs = bill_model_qs.only('bill_status')
 
         if not all(b.is_void() for b in bill_model_qs):
-            raise ValidationError('Must void all PO bills before PO can be voided.')
+            raise ValidationError(_('Must void all PO bills before PO can be voided.'))
 
         self.date_void = localdate() if not void_date else void_date
         self.po_status = self.PO_STATUS_VOID

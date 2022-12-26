@@ -198,7 +198,7 @@ class InvoiceModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
     def get_context_data(self, itemtxs_formset=None, **kwargs):
         context = super().get_context_data(**kwargs)
         invoice_model: InvoiceModel = self.object
-        title = f'Invoice {invoice_model.invoice_number}'
+        title = f'{_("Invoice")} {invoice_model.invoice_number}'
         context['page_title'] = title
         context['header_title'] = title
 
@@ -228,7 +228,7 @@ class InvoiceModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
         if not ledger_model.posted:
             messages.add_message(self.request,
                                  messages.INFO,
-                                 f'This Invoice has not been posted. Must post to see ledger changes.',
+                                 _('This Invoice has not been posted. Must post to see ledger changes.'),
                                  extra_tags='is-info')
 
         if not itemtxs_formset:
@@ -370,7 +370,7 @@ class InvoiceModelDetailView(DjangoLedgerSecurityMixIn, DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         invoice = self.object.invoice_number
-        title = f'Invoice {invoice}'
+        title = f'{_("Invoice")} {invoice}'
         context['page_title'] = title
         context['header_title'] = title
 

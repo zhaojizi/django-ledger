@@ -3,11 +3,12 @@ from django.forms import ModelForm, BaseModelFormSet, modelformset_factory, Sele
 
 from django_ledger.models import StagedTransactionModel, AccountModel, ImportJobModel
 from django_ledger.settings import DJANGO_LEDGER_FORM_INPUT_CLASSES
+from django.utils.translation import gettext_lazy as _
 
 
 class OFXFileImportForm(forms.Form):
     ofx_file = forms.FileField(
-        label='Select File...',
+        label=_('Select File...'),
         widget=forms.FileInput(attrs={
             'class': 'file-input'
         }))
@@ -67,7 +68,7 @@ class StagedTransactionModelForm(ModelForm):
         tx = self.cleaned_data['tx']
 
         if tx and not earnings_account:
-            raise ValidationError('If tx, ea must be present.')
+            raise ValidationError(_('If tx, ea must be present.'))
 
 
 class BaseStagedTransactionModelFormSet(BaseModelFormSet):

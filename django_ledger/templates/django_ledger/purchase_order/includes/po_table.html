@@ -6,12 +6,12 @@
     <table class="table is-fullwidth is-narrow is-striped is-bordered django-ledger-table-bottom-margin-75">
         <thead>
         <tr>
-            <th>PO Number</th>
-            <th>Description</th>
-            <th>Status Date</th>
-            <th>PO Status</th>
-            <th>PO Amount</th>
-            <th>Actions</th>
+            <th>{% trans 'PO Number' %}</th>
+            <th>{% trans 'Description' %}</th>
+            <th>{% trans 'Status Date' %}</th>
+            <th>{% trans 'PO Status' %}</th>
+            <th>{% trans 'PO Amount' %}</th>
+            <th>{% trans 'Actions' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -28,14 +28,14 @@
                             <button class="button is-small is-rounded is-outlined is-dark"
                                     aria-haspopup="true"
                                     aria-controls="dropdown-menu">
-                                <span>Actions</span>
+                                <span>{% trans 'Actions' %}</span>
                                 <span class="icon is-small">{% icon 'bi:arrow-down' 24 %}</span>
                             </button>
                         </div>
                         <div class="dropdown-menu" id="dropdown-menu-{{ po.uuid }}" role="menu">
                             <div class="dropdown-content">
                                 <a href="{% url 'django_ledger:po-detail' entity_slug=entity_slug po_pk=po.uuid %}"
-                                   class="dropdown-item has-text-success">Details</a>
+                                   class="dropdown-item has-text-success">{% trans 'Details' %}</a>
                                 <a href="{% url 'django_ledger:po-delete' entity_slug=entity_slug po_pk=po.uuid %}"
                                    class="dropdown-item has-text-weight-bold has-text-danger">{% trans ' Delete' %}</a>
                             </div>

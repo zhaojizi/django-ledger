@@ -1,12 +1,13 @@
 {% load django_ledger %}
+{% load i18n %}
 <div class="table-container">
     <table class="table is-fullwidth is-narrow is-striped is-bordered">
         <thead>
         <tr class="has-text-centered">
-            <th>Item</th>
-            <th>UOM</th>
-            <th>Quantity</th>
-            <th>Value</th>
+            <th>{% trans 'Item' %}</th>
+            <th>{% trans 'UOM' %}</th>
+            <th>{% trans 'Quantity' %}</th>
+            <th>{% trans 'Value' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -23,7 +24,7 @@
         <tr>
             <th></th>
             <th></th>
-            <th>Total Value</th>
+            <th>{% trans 'Total Value' %}</th>
             <th>{% currency_symbol %}{{ inventory_total_value | currency_format }}</th>
         </tr>
         </tfoot>

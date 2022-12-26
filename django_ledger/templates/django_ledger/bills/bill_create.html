@@ -27,8 +27,7 @@
                             <div class="column is-4">
                                 <button type="submit"
                                         id="djl-bill-create-button"
-                                        class="button is-primary is-outlined is-fullwidth my-2">Create
-                                </button>
+                                        class="button is-primary is-outlined is-fullwidth my-2">{% trans 'Create' %}</button>
                                 <a href="{% url 'django_ledger:bill-list' entity_slug=view.kwargs.entity_slug %}"
                                    id="djl-bill-create-back-button"
                                    class="button is-small is-dark is-fullwidth">{% trans 'Cancel' %}</a>

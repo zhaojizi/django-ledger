@@ -8,9 +8,9 @@
         <div class="column">
             <div class="box">
                 <a class="button is-primary is-outlined"
-                   href="{% url 'django_ledger:je-create' entity_slug=view.kwargs.entity_slug ledger_pk=view.kwargs.ledger_pk %}">Add</a>
+                   href="{% url 'django_ledger:je-create' entity_slug=view.kwargs.entity_slug ledger_pk=view.kwargs.ledger_pk %}">{% trans 'Add' %}</a>
                 <a class="button is-dark"
-                   href="{% url 'django_ledger:ledger-list' entity_slug=view.kwargs.entity_slug %}">Back</a>
+                   href="{% url 'django_ledger:ledger-list' entity_slug=view.kwargs.entity_slug %}">{% trans 'Back' %}</a>
                 {% jes_table %}
             </div>
         </div>

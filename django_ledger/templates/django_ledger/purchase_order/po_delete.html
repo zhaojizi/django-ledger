@@ -11,12 +11,10 @@
                 {% csrf_token %}
                 <div class="card">
                     <div class="card-content has-text-centered">
-                        <p class="title has-text-weight-light">Are you sure you want to delete
-                            Purchase Order {{ po_model.po_number }}</p>
+                        <p class="title has-text-weight-light">{% trans 'Are you sure you want to delete Purchase Order ' %}{{ po_model.po_number }}</p>
                     </div>
                     <div class="card-content has-text-centered">
-                        <p class="subtitle">All transactions associated with this Purchase Order will be deleted.
-                            If you want to void the PO instead, click here</p>
+                        <p class="subtitle">{% trans 'All transactions associated with this Purchase Order will be deleted.If you want to void the PO instead, click here' %}</p>
                     </div>
                     <div class="card-content has-text-centered">
                         <a href="{% url 'django_ledger:po-detail' entity_slug=view.kwargs.entity_slug po_pk=po_model.uuid %}"

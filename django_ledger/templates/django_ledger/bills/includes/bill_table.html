@@ -38,16 +38,16 @@
                             <button class="button is-small is-rounded is-outlined is-dark"
                                     aria-haspopup="true"
                                     aria-controls="dropdown-menu">
-                                <span>Actions</span>
+                                <span>{% trans 'Actions' %}</span>
                                 <span class="icon is-small">{% icon 'bi:arrow-down' 24 %}</span>
                             </button>
                         </div>
                         <div class="dropdown-menu" id="dropdown-menu-{{ bill.uuid }}" role="menu">
                             <div class="dropdown-content">
                                 <a href="{% url 'django_ledger:bill-detail' entity_slug=entity_slug bill_pk=bill.uuid %}"
-                                   class="dropdown-item has-text-success">Details</a>
+                                   class="dropdown-item has-text-success">{% trans 'Details' %}</a>
                                 <a href="{% url 'django_ledger:bill-update' entity_slug=entity_slug bill_pk=bill.uuid %}"
-                                   class="dropdown-item has-text-warning-dark">Update</a>
+                                   class="dropdown-item has-text-warning-dark">{% trans 'Update' %}</a>
                             </div>
                         </div>
                     </div>

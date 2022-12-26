@@ -22,14 +22,14 @@ class BugReportView(DjangoLedgerSecurityMixIn,
 
     def form_valid(self, form):
         form_data = form.cleaned_data
-        message = f'How to reproduce?: {form_data["reproduce"]}\n' + \
-                  f'Expectation: {form_data["expectation"]}\n' + \
-                  f'Device: {form_data["device"]}\n' + \
-                  f'From user: {self.request.user.username}\n' + \
-                  f'User email: {self.request.user.email}'
+        message = f'{_("How to reproduce?:")} {form_data["reproduce"]}\n' + \
+                  f'{_("Expectation:")} {form_data["expectation"]}\n' + \
+                  f'{_("Device:")} {form_data["device"]}\n' + \
+                  f'{_("From user:")} {self.request.user.username}\n' + \
+                  f'{_("User email:")} {self.request.user.email}'
         if DJANGO_LEDGER_FEEDBACK_EMAIL_LIST:
             send_mail(
-                subject=f'DJL Bug Report',
+                subject=_('DJL Bug Report'),
                 from_email=DJANGO_LEDGER_FEEDBACK_FROM_EMAIL,
                 recipient_list=DJANGO_LEDGER_FEEDBACK_EMAIL_LIST,
                 fail_silently=True,
@@ -45,14 +45,14 @@ class RequestNewFeatureView(DjangoLedgerSecurityMixIn,
 
     def form_valid(self, form):
         form_data = form.cleaned_data
-        message = f'Description: {form_data["feature_description"]}\n' + \
-                  f'Solution: {form_data["solution"]}\n' + \
-                  f'Alternatives: {form_data["alternatives"]}\n' + \
-                  f'From user: {self.request.user.username}\n' + \
-                  f'User email: {self.request.user.email}'
+        message = f'{_("Description:")} {form_data["feature_description"]}\n' + \
+                  f'{_("Solution:")} {form_data["solution"]}\n' + \
+                  f'{_("Alternatives")}: {form_data["alternatives"]}\n' + \
+                  f'{_("From user:")} {self.request.user.username}\n' + \
+                  f'{_("User email:")} {self.request.user.email}'
         if DJANGO_LEDGER_FEEDBACK_EMAIL_LIST:
             send_mail(
-                subject=f'DJL New Feature Request',
+                subject=_('DJL New Feature Request'),
                 from_email=DJANGO_LEDGER_FEEDBACK_FROM_EMAIL,
                 recipient_list=DJANGO_LEDGER_FEEDBACK_EMAIL_LIST,
                 fail_silently=True,

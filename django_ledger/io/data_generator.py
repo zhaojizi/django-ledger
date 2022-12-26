@@ -12,6 +12,7 @@ from itertools import groupby
 from random import randint, random, choice, choices
 from string import ascii_uppercase
 from typing import Union
+from django.utils.translation import gettext_lazy as _
 
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.utils.timezone import localtime, localdate
@@ -50,7 +51,9 @@ class EntityDataGenerator(LoggingMixIn):
         if not FAKER_IMPORTED:
             raise ImproperlyConfigured('Must install Faker library to generate random data.')
 
-        self.fk = Faker(['en_US'])
+        self.enfk = Faker(['en_US'])
+
+        self.fk = Faker(['zh-CN'])
         self.fk.add_provider(company)
         self.fk.add_provider(address)
         self.fk.add_provider(phone_number)
@@ -82,7 +85,7 @@ class EntityDataGenerator(LoggingMixIn):
         self.account_models = None
         self.accounts_by_role = None
 
-        self.COUNTRY = 'US'
+        self.COUNTRY = 'CN'
         self.NB_UNITS: int = 4
 
         self.PRODUCTS_MIN = 20
@@ -97,17 +100,16 @@ class EntityDataGenerator(LoggingMixIn):
 
     def populate_entity(self):
 
-        self.logger.info('Checking for existing transactions...')
+        self.logger.info(_('Checking for existing transactions...'))
         txs_qs = TransactionModel.objects.for_entity(
             entity_slug=self.entity_model,
             user_model=self.user_model
         )
 
         if txs_qs.count() > 0:
-            raise ValidationError(
-                f'Cannot populate random data on {self.entity_model.name} because it already has existing Transactions')
+            raise ValidationError(_('Cannot populate random data on {} because it already has existing Transactions') % self.entity_model.name)
 
-        self.logger.info(f'Pulling Entity {self.entity_model} accounts...')
+        self.logger.info(_('Pulling Entity %s accounts...') % self.entity_model)
         self.account_models = AccountModel.on_coa.for_entity_available(
             entity_slug=self.entity_model.slug,
             user_model=self.user_model
@@ -153,17 +155,18 @@ class EntityDataGenerator(LoggingMixIn):
         return next_date
 
     def create_entity_units(self, nb_units: int = None):
-        self.logger.info(f'Creating entity units...')
+        self.logger.info(_('Creating entity units...'))
         nb_units = self.NB_UNITS if not nb_units else nb_units
 
         if nb_units:
             assert nb_units >= 0, 'Number of unite must be greater than 0'
-
+        name_template = _('Unit %s')
+        name_template2 = _("Unit")
         entity_unit_models = [
             EntityUnitModel.add_root(
-                name=f'Unit {u}',
+                name=name_template % u,
                 slug=create_entity_unit_slug(
-                    name=f'{self.entity_model.name}-Unit {u}'),
+                    name=f'{self.entity_model.name}-{name_template2} {u}'),
                 entity=self.entity_model,
                 document_prefix=''.join(choices(ascii_uppercase, k=3))
             ) for u in range(nb_units)
@@ -172,7 +175,7 @@ class EntityDataGenerator(LoggingMixIn):
         self.entity_unit_models = self.entity_model.entityunitmodel_set.all()
 
     def create_vendors(self):
-        self.logger.info('Creating vendors...')
+        self.logger.info(_('Creating vendors...'))
         vendor_count = randint(10, 20)
         vendor_models = [
             VendorModel(
@@ -181,7 +184,7 @@ class EntityDataGenerator(LoggingMixIn):
                 address_1=self.fk.street_address(),
                 address_2=self.fk.building_number() if random() < .2 else None,
                 city=self.fk.city(),
-                state=self.fk.state_abbr(),
+                state=self.enfk.state_abbr(),
                 zip_code=self.fk.postcode(),
                 phone=self.fk.phone_number(),
                 country=self.COUNTRY,
@@ -189,7 +192,7 @@ class EntityDataGenerator(LoggingMixIn):
                 website=self.fk.url(),
                 active=True,
                 hidden=False,
-                description='A cool vendor description.'
+                description="很酷的供应商描述。"
             ) for _ in range(vendor_count)
         ]
 
@@ -199,7 +202,7 @@ class EntityDataGenerator(LoggingMixIn):
         self.vendor_models = VendorModel.objects.bulk_create(vendor_models, ignore_conflicts=True)
 
     def create_customers(self):
-        self.logger.info(f'Creating entity customers...')
+        self.logger.info(_('Creating entity customers...'))
         customer_count = randint(10, 20)
         customer_models = [
             CustomerModel(
@@ -208,7 +211,7 @@ class EntityDataGenerator(LoggingMixIn):
                 address_1=self.fk.street_address() + self.fk.street_suffix(),
                 address_2=self.fk.building_number() if random() > .2 else None,
                 city=self.fk.city(),
-                state=self.fk.state_abbr(),
+                state=self.enfk.state_abbr(),
                 zip_code=self.fk.postcode(),
                 country=self.COUNTRY,
                 phone=self.fk.phone_number(),
@@ -216,7 +219,7 @@ class EntityDataGenerator(LoggingMixIn):
                 website=self.fk.url(),
                 active=True,
                 hidden=False,
-                description=f'A cool customer description. We love customers!'
+                description='很酷的客户描述。我们爱客户！'
             ) for _ in range(customer_count)
         ]
 
@@ -226,9 +229,11 @@ class EntityDataGenerator(LoggingMixIn):
         self.customer_models = CustomerModel.objects.bulk_create(customer_models, ignore_conflicts=True)
 
     def create_bank_accounts(self):
-        self.logger.info(f'Creating entity accounts...')
+        self.logger.info(_('Creating entity accounts...'))
+        name_tepmlate1 = _('%s Checking Account')
+        name_tepmlate2 = _('%s Savings Account')
         bank_account_models = [
-            BankAccountModel(name=f'{self.entity_model.name} Checking Account',
+            BankAccountModel(name=name_tepmlate1 % self.entity_model.name,
                              account_number=self.fk.bban(),
                              routing_number=self.fk.swift11(),
                              aba_number=self.fk.swift(),
@@ -236,7 +241,7 @@ class EntityDataGenerator(LoggingMixIn):
                              active=True,
                              cash_account=choice(self.accounts_by_role['asset_ca_cash']),
                              entity_model=self.entity_model),
-            BankAccountModel(name=f'{self.entity_model.name} Savings Account',
+            BankAccountModel(name=name_tepmlate2 % self.entity_model.name,
                              account_number=self.fk.bban(),
                              routing_number=self.fk.swift11(),
                              aba_number=self.fk.swift(),
@@ -251,14 +256,14 @@ class EntityDataGenerator(LoggingMixIn):
         self.bank_account_models = BankAccountModel.objects.bulk_create(bank_account_models, ignore_conflicts=True)
 
     def create_uom_models(self):
-        self.logger.info(f'Creating entity Unit of Measures...')
+        self.logger.info(_('Creating entity Unit of Measures...'))
         UOMs = {
-            'unit': 'Unit',
-            'ln.ft': 'Linear Feet',
-            'sq.ft': 'Square Feet',
-            'lb': 'Pound',
-            'pallet': 'Pallet',
-            'man-hour': 'Man Hour'
+            'unit': _('Unit'),
+            'ln.ft': _('Linear Feet'),
+            'sq.ft': _('Square Feet'),
+            'lb': _('Pound'),
+            'pallet': _('Pallet'),
+            'man-hour': _('Man Hour')
         }
 
         uom_models = [
@@ -269,14 +274,15 @@ class EntityDataGenerator(LoggingMixIn):
         self.uom_models = UnitOfMeasureModel.objects.bulk_create(uom_models)
 
     def create_products(self):
-        self.logger.info(f'Creating entity product items...')
+        self.logger.info(_('Creating entity product items...'))
         product_count = randint(self.PRODUCTS_MIN, self.PRODUCTS_MAX)
         product_models = list()
         for i in range(product_count):
             is_inventory = random() > 0.75
             if is_inventory:
+                name_template = _('Product or Service %s')
                 product_models.append(ItemModel.add_root(
-                    name=f'Product or Service {randint(1000, 9999)}',
+                    name=name_template % randint(1000, 9999),
                     uom=choice(self.uom_models),
                     item_type=choice(ItemModel.ITEM_CHOICES)[0],
                     sku=generate_random_sku(),
@@ -291,8 +297,9 @@ class EntityDataGenerator(LoggingMixIn):
                     additional_info=dict()
                 ))
             else:
+                name_template =_('Product or Service %s')
                 product_models.append(ItemModel.add_root(
-                    name=f'Product or Service {randint(1000, 9999)}',
+                    name=name_template % randint(1000, 9999),
                     uom=choice(self.uom_models),
                     item_type=choice(ItemModel.ITEM_CHOICES)[0],
                     sku=generate_random_sku(),
@@ -308,32 +315,33 @@ class EntityDataGenerator(LoggingMixIn):
         self.update_products()
 
     def update_products(self):
-        self.logger.info(f'Updating product catalog...')
+        self.logger.info(_('Updating product catalog...'))
         self.product_and_services_models = ItemModel.objects.products_and_services(
             entity_slug=self.entity_model.slug,
             user_model=self.user_model
         )
 
     def update_inventory(self):
-        self.logger.info(f'Updating inventory...')
+        self.logger.info(_('Updating inventory...'))
         self.inventory_models = ItemModel.objects.inventory(
             entity_slug=self.entity_model.slug,
             user_model=self.user_model
         )
 
     def update_expenses(self):
-        self.logger.info(f'Updating expenses...')
+        self.logger.info(_('Updating expenses...'))
         self.expense_models = ItemModel.objects.expenses(
             entity_slug=self.entity_model.slug,
             user_model=self.user_model
         )
 
     def create_expenses(self):
-        self.logger.info(f'Creating entity expense items...')
+        self.logger.info(_('Creating entity expense items...'))
         expense_count = randint(self.PRODUCTS_MIN, self.PRODUCTS_MAX)
+        name_template = _('Expense Item %s')
         expense_models = [
             ItemModel.add_root(
-                name=f'Expense Item {randint(1000, 9999)}',
+                name=name_template % randint(1000, 9999),
                 uom=choice(self.uom_models),
                 item_type=choice(ItemModel.ITEM_CHOICES)[0],
                 sku=generate_random_sku(),
@@ -349,11 +357,12 @@ class EntityDataGenerator(LoggingMixIn):
         self.update_expenses()
 
     def create_inventories(self):
-        self.logger.info(f'Creating entity inventory items...')
+        self.logger.info(_('Creating entity inventory items...'))
         inv_count = randint(self.PRODUCTS_MIN, self.PRODUCTS_MAX)
+        name_template =_('Inventory %s')
         inventory_models = [
             ItemModel.add_root(
-                name=f'Inventory {randint(1000, 9999)}',
+                name=name_template % randint(1000, 9999),
                 uom=choice(self.uom_models),
                 item_type=choice(ItemModel.ITEM_CHOICES)[0],
                 item_id=generate_random_item_id(),
@@ -369,9 +378,10 @@ class EntityDataGenerator(LoggingMixIn):
         self.update_inventory()
 
     def create_estimate(self, date_draft: date):
+        title_template = _('Customer Estimate %s')
         estimate_model: EstimateModel = EstimateModel(
             terms=choice(EstimateModel.CONTRACT_TERMS)[0],
-            title=f'Customer Estimate {date_draft}',
+            title=title_template % date_draft,
             date_draft=date_draft
         )
         estimate_model.configure(entity_slug=self.entity_model,
@@ -379,7 +389,7 @@ class EntityDataGenerator(LoggingMixIn):
                                     customer_model=choice(self.customer_models))
 
         estimate_model.save()
-        self.logger.info(f'Creating entity estimate {estimate_model.estimate_number}...')
+        self.logger.info(_('Creating entity estimate %s...') % estimate_model.estimate_number)
 
         estimate_items = [
             ItemTransactionModel(
@@ -437,7 +447,7 @@ class EntityDataGenerator(LoggingMixIn):
 
         bill_model.full_clean()
         bill_model.save()
-        self.logger.info(f'Creating entity bill {bill_model.bill_number}...')
+        self.logger.info(_('Creating entity bill %s...') % bill_model.bill_number)
 
         bill_items = [
             ItemTransactionModel(
@@ -491,7 +501,7 @@ class EntityDataGenerator(LoggingMixIn):
     def create_po(self, date_draft: date):
         po_model: PurchaseOrderModel = PurchaseOrderModel(date_draft=date_draft)
         po_model = po_model.configure(entity_slug=self.entity_model, user_model=self.user_model)
-        po_model.po_title = f'PO Title for {po_model.po_number}'
+        po_model.po_title = _('PO Title for %s') %po_model.po_number
         po_model.save()
 
         po_items = [
@@ -510,7 +520,7 @@ class EntityDataGenerator(LoggingMixIn):
         po_model.update_state(itemtxs_list=po_items)
         po_model.full_clean()
         po_model.save()
-        self.logger.info(f'Creating entity purchase order {po_model.po_number}...')
+        self.logger.info(_('Creating entity purchase order %s...') % po_model.po_number)
 
         # pylint: disable=no-member
         po_items = po_model.itemtransactionmodel_set.bulk_create(po_items)
@@ -626,7 +636,7 @@ class EntityDataGenerator(LoggingMixIn):
             date_draft=date_draft,
             additional_info=dict()
         )
-        self.logger.info(f'Creating entity invoice {invoice_model.invoice_number}...')
+        self.logger.info(_('Creating entity invoice %s...') % invoice_model.invoice_number )
         ledger_model, invoice_model = invoice_model.configure(
             entity_slug=self.entity_model,
             user_model=self.user_model)
@@ -709,7 +719,7 @@ class EntityDataGenerator(LoggingMixIn):
 
     def fund_entity(self):
 
-        self.logger.info(f'Funding entity...')
+        self.logger.info(_('Funding entity...'))
         capital_acc = choice(self.accounts_by_role[EQUITY_CAPITAL])
         cash_acc = choice(self.bank_account_models).cash_account
 
@@ -725,7 +735,7 @@ class EntityDataGenerator(LoggingMixIn):
         )
 
     def recount_inventory(self):
-        self.logger.info(f'Recounting inventory...')
+        self.logger.info(_('Recounting inventory...'))
         self.entity_model.update_inventory(
             user_model=self.user_model,
             commit=True

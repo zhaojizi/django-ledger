@@ -16,7 +16,7 @@ from django_ledger.models.entity import EntityModel
 from django_ledger.models.ledger import LedgerModel
 from django_ledger.views.mixins import (
     YearlyReportMixIn, QuarterlyReportMixIn,
-    MonthlyReportMixIn, DjangoLedgerSecurityMixIn, DateReportMixIn, BaseDateNavigationUrlMixIn,
+    MonthlyReportMixIn, DjangoLedgerSecurityMixIn, DateReportMixIn, SessionConfigurationMixIn, BaseDateNavigationUrlMixIn,
     EntityUnitMixIn)
 
 
@@ -116,6 +116,7 @@ class BaseLedgerBalanceSheetView(DjangoLedgerSecurityMixIn, RedirectView):
 
 
 class FiscalYearLedgerBalanceSheetView(DjangoLedgerSecurityMixIn,
+                                       SessionConfigurationMixIn,
                                        BaseDateNavigationUrlMixIn,
                                        EntityUnitMixIn,
                                        YearlyReportMixIn,
@@ -170,6 +171,7 @@ class BaseLedgerIncomeStatementView(DjangoLedgerSecurityMixIn, RedirectView):
 
 
 class FiscalYearLedgerIncomeStatementView(DjangoLedgerSecurityMixIn,
+                                          SessionConfigurationMixIn,
                                           BaseDateNavigationUrlMixIn,
                                           EntityUnitMixIn,
                                           YearlyReportMixIn,

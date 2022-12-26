@@ -109,9 +109,9 @@ class TransactionModelAdmin(models.Manager):
                  unit_slug: str = None):
 
         if not unit_model and not unit_slug:
-            raise ValueError(f'None unit_model or unit_slug were provided.')
+            raise ValueError(_('None unit_model or unit_slug were provided.'))
         elif unit_model and unit_slug:
-            raise ValueError(f'Must pass either unit_model or unit_slug, not both.')
+            raise ValueError(_('Must pass either unit_model or unit_slug, not both.'))
 
         qs = self.for_entity(user_model=user_model, entity_slug=entity_slug)
 

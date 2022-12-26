@@ -14,29 +14,25 @@
                     <nav class="level">
                         <div class="level-item has-text-centered">
                             <div>
-                                <p class="heading">{% trans 'Revenue Estimate' %}:
-                                <p class="title" id="djl-cj-detail-estimated-revenue">
+                                <p class="heading">{% trans 'Revenue Estimate' %}:<p class="title" id="djl-cj-detail-estimated-revenue">
                                     {% currency_symbol %}{{ estimate_model.revenue_estimate  | currency_format }}</p>
                             </div>
                         </div>
                         <div class="level-item has-text-centered">
                             <div>
-                                <p class="heading">{% trans 'Cost Estimate' %}:
-                                <p class="title" id="djl-cj-detail-estimated-cost">
+                                <p class="heading">{% trans 'Cost Estimate' %}:<p class="title" id="djl-cj-detail-estimated-cost">
                                     {% currency_symbol %}{{ estimate_model.cost_estimate  | absolute | currency_format }}</p>
                             </div>
                         </div>
                         <div class="level-item has-text-centered">
                             <div>
-                                <p class="heading">{% trans 'Profit Estimate' %}:
-                                <p class="title" id="djl-cj-detail-estimated-cost">
+                                <p class="heading">{% trans 'Profit Estimate' %}:<p class="title" id="djl-cj-detail-estimated-cost">
                                     {% currency_symbol %}{{ estimate_model.profit_estimate | currency_format }}</p>
                             </div>
                         </div>
                         <div class="level-item has-text-centered">
                             <div>
-                                <p class="heading">{% trans 'Gross Margin Estimate' %}:
-                                <p class="title" id="djl-cj-detail-estimated-cost">
+                                <p class="heading">{% trans 'Gross Margin Estimate' %}:<p class="title" id="djl-cj-detail-estimated-cost">
                                     {% currency_symbol %}{{ estimate_model.gross_margin_estimate  | percentage }}</p>
                             </div>
                         </div>
@@ -57,7 +53,7 @@
                     </div>
                 </div>
                 <div class="column is-12">
-                    {% include 'django_ledger/includes/card_markdown.html' with style='card_1'  title='Notes' notes_html=object.notes_html %}
+                    {% include 'django_ledger/includes/card_markdown.html' with style='card_1'  title=_('Notes') notes_html=object.notes_html %}
                 </div>
 
                 {% if estimate_model.is_approved %}

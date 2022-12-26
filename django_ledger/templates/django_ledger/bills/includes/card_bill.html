@@ -13,22 +13,20 @@
                     <p class="title">{{ bill.vendor.vendor_name }}</p>
                     <p class="subtitle has-text-weight-light">{{ bill.vendor.address_1 }}</p>
                     {% if not bill.is_past_due %}
-                        <p class="is-size-5 has-text-info">Due in: {{ bill.date_due | timeuntil }}</p>
+                        <p class="is-size-5 has-text-info">{% trans 'Due in' %}: {{ bill.date_due | timeuntil }}</p>
                     {% else %}
-                        <p class="has-text-danger has-text-weight-bold is-size-5">Past
-                            Due: {{ bill.date_due | timesince }} ago</p>
+                        <p class="has-text-danger has-text-weight-bold is-size-5">{% trans 'Past Due: ' %} {{ bill.date_due | timesince }} ago</p>
                     {% endif %}
                     {% if bill.accrue %}
-                        <p>Is Accrued: <span
+                        <p>{% trans 'Is Accrued: ' %}<span
                                 class="icon has-text-success">{% icon 'ant-design:check-circle-filled' 24 %}</span>
                             {% else %}
-                        <p>Accrue:
-                        <span class="icon is-small has-text-danger">{% icon 'maki:roadblock-11' 24 %}</span>
+                        <p>{% trans 'Accrue:' %}<span class="icon is-small has-text-danger">{% icon 'maki:roadblock-11' 24 %}</span>
                     {% endif %}
-                    <p class="is-size-5 has-text-danger">You Still Owe:
+                    <p class="is-size-5 has-text-danger">{% trans 'You Still Owe: ' %}
                         {% currency_symbol %}{{ bill.get_amount_open | currency_format }}</p>
-                    <p>Amount Paid: {% currency_symbol %}{{ bill.amount_paid | currency_format }}</p>
-                    <p>Progressed: {{ bill.get_progress | percentage }}</p><br>
+                    <p>{% trans 'Amount Paid: ' %} {% currency_symbol %}{{ bill.amount_paid | currency_format }}</p>
+                    <p>{% trans 'Progressed: ' %} {{ bill.get_progress | percentage }}</p><br>
                     <progress class="progress is-medium is-success"
                               value="{{ bill.get_progress_percent }}"
                               max="100">
@@ -61,13 +59,11 @@
                     {% if not bill.is_void %}
                         {% if bill.is_draft %}
                             <h3 class="is-size-3 has-text-centered has-text-weight-bold has-text-warning">{% trans 'This bill is' %} {{ bill.get_bill_status_display }}</h3>
-                            <p class="is-size-3 has-text-dark">{% trans 'Amount Due' %}:
-                                <span class="has-text-weight-bold">
+                            <p class="is-size-3 has-text-dark">{% trans 'Amount Due' %}:<span class="has-text-weight-bold">
                                     {% currency_symbol %}{{ bill.amount_due | currency_format }}
                                 </span>
                             </p>
-                            <p class="is-size-3 has-text-dark">{% trans 'Due Date' %}:
-                                <span class="has-text-weight-bold">{{ bill.date_due | timeuntil }}</span>
+                            <p class="is-size-3 has-text-dark">{% trans 'Due Date' %}:<span class="has-text-weight-bold">{{ bill.date_due | timeuntil }}</span>
                             </p>
                             <p class="is-size-3">{% trans 'Is Accrued' %}:
                                 {% if bill.accrue %}
@@ -78,13 +74,11 @@
                             </p>
                         {% elif bill.is_review %}
                             <h3 class="is-size-3 has-text-centered has-text-weight-bold has-text-warning">{% trans 'This bill is' %} {{ bill.get_bill_status_display }}</h3>
-                            <p class="is-size-3 has-text-dark">{% trans 'Amount Due' %}:
-                                <span class="has-text-weight-bold">
+                            <p class="is-size-3 has-text-dark">{% trans 'Amount Due' %}:<span class="has-text-weight-bold">
                                     {% currency_symbol %}{{ bill.amount_due | currency_format }}
                                 </span>
                             </p>
-                            <p class="is-size-3 has-text-dark">{% trans 'Due Date' %}:
-                                <span class="has-text-weight-bold">{{ bill.date_due | timeuntil }}</span>
+                            <p class="is-size-3 has-text-dark">{% trans 'Due Date' %}:<span class="has-text-weight-bold">{{ bill.date_due | timeuntil }}</span>
                             </p>
                             <p class="is-size-3">{% trans 'Is Accrued' %}:
                                 {% if bill.accrue %}
@@ -99,13 +93,11 @@
 
                         {% elif bill.is_approved %}
                             <h3 class="is-size-3 has-text-centered has-text-weight-bold has-text-info">{% trans 'This bill is' %} {{ bill.get_bill_status_display }}</h3>
-                            <p class="is-size-3 has-text-dark">{% trans 'Amount Due' %}:
-                                <span class="has-text-weight-bold">
+                            <p class="is-size-3 has-text-dark">{% trans 'Amount Due' %}:<span class="has-text-weight-bold">
                                     {% currency_symbol %}{{ bill.amount_due | currency_format }}
                                 </span>
                             </p>
-                            <p class="is-size-3 has-text-dark">{% trans 'Due Date' %}:
-                                <span class="has-text-weight-bold">{{ bill.date_due | timeuntil }}</span>
+                            <p class="is-size-3 has-text-dark">{% trans 'Due Date' %}:<span class="has-text-weight-bold">{{ bill.date_due | timeuntil }}</span>
                             </p>
                             <p class="is-size-3">{% trans 'Is Accrued' %}:
                                 {% if bill.accrue %}
@@ -128,23 +120,20 @@
 
                         {% elif bill.is_paid %}
                             <h3 class="is-size-3 has-text-centered has-text-weight-bold has-text-success">{% trans 'This bill is' %} {{ bill.get_bill_status_display }}</h3>
-                            <p class="is-size-3 has-text-dark">{% trans 'Amount Paid' %}:
-                                <span class="has-text-weight-bold">
+                            <p class="is-size-3 has-text-dark">{% trans 'Amount Paid' %}:<span class="has-text-weight-bold">
                                     {% currency_symbol %}{{ bill.amount_paid | currency_format }}
                                 </span>
                             </p>
-                            <p class="is-size-3 has-text-dark">{% trans 'Paid Date' %}:
-                                <span class="has-text-weight-bold">{{ bill.date_paid | timesince }}</span>
+                            <p class="is-size-3 has-text-dark">{% trans 'Paid Date' %}:<span class="has-text-weight-bold">{{ bill.date_paid | timesince }}</span>
                                 {% if bill.xref %}
                                     <p class="is-size-5 is-italic">{% trans 'External Ref' %}: {{ bill.xref }}</p>
                                 {% endif %}
                         {% endif %}
 
                     {% else %}
-                        <p class="is-size-3 has-text-dark">Bill Amount:
-                            <span class="has-text-weight-bold">{% currency_symbol %}{{ bill.amount_due | currency_format }}</span>
+                        <p class="is-size-3 has-text-dark">{% trans 'Bill Amount:' %}<span class="has-text-weight-bold">{% currency_symbol %}{{ bill.amount_due | currency_format }}</span>
                         </p>
-                        <p class="is-size-3 has-text-warning-dark">VOIDED {{ bill.void_date | date }}</p>
+                        <p class="is-size-3 has-text-warning-dark">{% trans 'VOIDED ' %}{{ bill.void_date | date }}</p>
                     {% endif %}
                 </div>
                 <footer class="card-footer">

@@ -144,7 +144,7 @@ class EstimateModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
                              verbose_name=_('Customer Estimate Title'),
                              validators=[
                                  MinLengthValidator(limit_value=5,
-                                                    message=_(f'PO Title length must be greater than 5'))
+                                                    message=_(_('PO Title length must be greater than 5')))
                              ])
     status = models.CharField(max_length=10,
                               choices=CJ_STATUS,
@@ -219,8 +219,8 @@ class EstimateModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
 
     def __str__(self):
         if self.is_contract():
-            return f'Contract {self.estimate_number} | {self.title}'
-        return f'Estimate {self.estimate_number} | {self.title}'
+            return f'{_("Contract")} {self.estimate_number} | {self.title}'
+        return f'{_("Estimate")} {self.estimate_number} | {self.title}'
 
     # Configuration...
     def configure(self,
@@ -234,7 +234,7 @@ class EstimateModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
         elif isinstance(entity_slug, EntityModel):
             entity_model = entity_slug
         else:
-            raise ValidationError('entity_slug must be an instance of str or EntityModel')
+            raise ValidationError(_('entity_slug must be an instance of str or EntityModel'))
         self.entity = entity_model
         self.customer = customer_model
         if commit:
@@ -305,7 +305,7 @@ class EstimateModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
     # DRAFT...
     def mark_as_draft(self, commit: bool = False):
         if not self.can_draft():
-            raise ValidationError(f'Estimate {self.estimate_number} cannot be marked as draft...')
+            raise ValidationError(_('Estimate %s cannot be marked as draft...') % self.estimate_number)
         self.status = self.CJ_STATUS_DRAFT
         self.clean()
         if commit:
@@ -330,7 +330,7 @@ class EstimateModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
     # REVIEW...
     def mark_as_review(self, date_in_review: date = None, commit: bool = True):
         if not self.can_review():
-            raise ValidationError(f'Estimate {self.estimate_number} cannot be marked as In Review...')
+            raise ValidationError(_('Estimate %s cannot be marked as In Review...') % self.estimate_number)
 
         itemtxs_qs = self.itemtransactionmodel_set.all()
         if not itemtxs_qs.count():
@@ -429,7 +429,7 @@ class EstimateModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
     # CANCEL
     def mark_as_canceled(self, commit: bool = False, date_canceled: date = None):
         if not self.can_cancel():
-            raise ValidationError(f'Estimate {self.estimate_number} cannot be canceled...')
+            raise ValidationError(_('Estimate %s cannot be canceled...') % self.estimate_number)
         if not date_canceled:
             date_canceled = localdate()
         self.date_canceled = date_canceled
@@ -458,7 +458,7 @@ class EstimateModelAbstract(CreateUpdateMixIn, MarkdownNotesMixIn):
     # VOID
     def mark_as_void(self, commit: bool = False, date_void: date = None):
         if not self.can_void():
-            raise ValidationError(f'Estimate {self.estimate_number} cannot be void...')
+            raise ValidationError(_('Estimate %s cannot be void...') % self.estimate_number)
         if not date_void:
             date_void = localdate()
         self.date_void = date_void

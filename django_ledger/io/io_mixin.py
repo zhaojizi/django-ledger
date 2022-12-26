@@ -45,7 +45,7 @@ def diff_tx_data(tx_data: list, raise_exception: bool = True):
         CREDITS = sum(tx['amount'] for tx in tx_data if tx['tx_type'] == 'credit')
         DEBITS = sum(tx['amount'] for tx in tx_data if tx['tx_type'] == 'debit')
     else:
-        raise ValidationError('Only Dictionary or TransactionModel allowed.')
+        raise ValidationError(_('Only Dictionary or TransactionModel allowed.'))
 
     is_valid = (CREDITS == DEBITS)
     diff = CREDITS - DEBITS
@@ -192,7 +192,7 @@ class IOMixIn:
             # If IO is on unit model....
             elif isinstance(self, lazy_importer.get_unit_model()):
                 if not entity_slug:
-                    raise ValidationError('Calling digest from Entity Unit requires entity_slug')
+                    raise ValidationError(_('Calling digest from Entity Unit requires entity_slug'))
                 txs_qs = TransactionModel.objects.for_unit(
                     user_model=user_model,
                     entity_slug=entity_slug,
@@ -474,7 +474,7 @@ class IOMixIn:
             isinstance(self, lazy_importer.get_entity_model()),
             not je_ledger
         ]):
-            raise ValidationError('Must pass an instance of LedgerModel')
+            raise ValidationError(_('Must pass an instance of LedgerModel'))
 
         if not je_ledger:
             je_ledger = self

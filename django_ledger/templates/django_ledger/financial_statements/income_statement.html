@@ -32,7 +32,7 @@
                         <h2 class="is-size-2 has-text-weight-light">
                             {% if quarter %}{{ year }} | Q{{ quarter }}
                                 {% elif month %}{{ start_date | date:'F, Y' }}
-                            {% else %}Fiscal Year {{ year }}
+                            {% else %}{% trans 'Fiscal Year' %} {{ year }}
                             {% endif %}</h2>
                         <h3 class="is-size-4 is-italic has-font-weight-light">
                             {{ from_date | date:'m/d/Y' }} - {{ to_date | date:'m/d/Y' }}
@@ -45,12 +45,10 @@
 
             {% if ledger %}
                 <a class="button is-fullwidth is-dark is-small my-2"
-                   href="{% url 'django_ledger:ledger-list' entity_slug=view.kwargs.entity_slug %}">Go
-                    Back</a>
+                   href="{% url 'django_ledger:ledger-list' entity_slug=view.kwargs.entity_slug %}">{% trans 'Go Back' %}</a>
             {% elif entity %}
                 <a class="button is-fullwidth is-dark is-small my-2"
-                   href="{% url 'django_ledger:entity-dashboard' entity_slug=view.kwargs.entity_slug %}">Go
-                    Back</a>
+                   href="{% url 'django_ledger:entity-dashboard' entity_slug=view.kwargs.entity_slug %}">{% trans 'Go Back' %}</a>
             {% endif %}
             <a class="button is-fullwidth is-light is-small my-2"
                href="?by_unit=1">{% trans 'By Unit' %}</a>

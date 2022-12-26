@@ -28,8 +28,7 @@
                 </td>
                 <td class="has-text-centered">{% if item.bill_model_id %}
                     <a class="is-small is-info button"
-                       href="{% url 'django_ledger:bill-detail' entity_slug=entity_slug bill_pk=item.bill_model_id %}">View
-                        Bill</a>{% endif %}
+                       href="{% url 'django_ledger:bill-detail' entity_slug=entity_slug bill_pk=item.bill_model_id %}">{% trans 'View Bill' %}</a>{% endif %}
                 </td>
             </tr>
         {% endfor %}

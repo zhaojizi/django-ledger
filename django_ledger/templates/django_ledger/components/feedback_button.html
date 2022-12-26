@@ -30,7 +30,7 @@
                 <div class="container">
                     <div class="columns is-multiline">
                         <div class="column is-12">
-                            <h2>Thank you for helping make Django Ledger better...</h2>
+                            <h2>{% trans 'Thank you for helping make Django Ledger better...' %}</h2>
                         </div>
                         <div class="column is-12">
                             {{ bug_form }}
@@ -39,8 +39,8 @@
                 </div>
             </section>
             <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Submit</button>
-                <button class="button" onclick="djLedger.toggleModal('{{ bug_modal_html_id }}')">Cancel</button>
+                <button type="submit" class="button is-success">{% trans 'Submit' %}</button>
+                <button class="button" onclick="djLedger.toggleModal('{{ bug_modal_html_id }}')">{% trans 'Cancel' %}</button>
             </footer>
         </form>
     </div>
@@ -62,7 +62,7 @@
                 <div class="container">
                     <div class="columns is-multiline">
                         <div class="column is-12">
-                            <h2>Thank you for helping make Django Ledger better...</h2>
+                            <h2>{% trans 'Thank you for helping make Django Ledger better...' %}</h2>
                         </div>
                         <div class="column is-12">
                             {{ feature_form }}
@@ -71,10 +71,9 @@
                 </div>
             </section>
             <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Send</button>
+                <button type="submit" class="button is-success">{% trans 'Send' %}</button>
                 <button class="button"
-                        onclick="djLedger.toggleModal('{{ feature_modal_html_id }}')">Cancel
-                </button>
+                        onclick="djLedger.toggleModal('{{ feature_modal_html_id }}')">{% trans 'Cancel' %}</button>
             </footer>
         </form>
     </div>

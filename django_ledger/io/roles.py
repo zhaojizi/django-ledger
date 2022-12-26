@@ -3,7 +3,7 @@ Django Ledger created by Miguel Sanda <msanda@arrobalytics.com>.
 Copyright© EDMA Group Inc licensed under the GPLv3 Agreement.
 
 Contributions to this module:
-    * Miguel Sanda <msanda@arrobalytics.com>
+Miguel Sanda <msanda@arrobalytics.com>
 """
 
 import sys
@@ -13,8 +13,10 @@ from typing import Set
 from django.utils.translation import gettext as _
 
 from django_ledger.exceptions import InvalidRoleError
+from django_ledger.models.utils import lazy_loader
 
 mod = sys.modules[__name__]
+
 
 # --- ASSET ROLES ----
 # Current Assets ---

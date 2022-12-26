@@ -50,8 +50,7 @@
                         {{ po_model.date_approved | date }}</h3>
                     <h3 class="is-size-5 has-text-weight-light">{% trans 'Purchase Order Amount' %}:
                         {% currency_symbol %}{{ po_model.po_amount | currency_format }}</h3>
-                    <h3 class="is-size-4 has-text-weight-light">{% trans 'Fulfilled' %}:
-                        <span class="icon has-text-success">{% icon 'ant-design:check-circle-filled' 24 %}</span>
+                    <h3 class="is-size-4 has-text-weight-light">{% trans 'Fulfilled' %}:<span class="icon has-text-success">{% icon 'ant-design:check-circle-filled' 24 %}</span>
                     </h3>
                 {% endif %}
             </div>

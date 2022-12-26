@@ -10,10 +10,9 @@
                       action="{% url 'django_ledger:je-update' entity_slug=view.kwargs.entity_slug ledger_pk=view.kwargs.ledger_pk je_pk=journal_entry.uuid %}">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button class="button is-fullwidth is-primary is-outlined djetler_my_1" type="submit">Update
-                    </button>
+                    <button class="button is-fullwidth is-primary is-outlined djetler_my_1" type="submit">{% trans 'Update' %}</button>
                     <a href="{% url 'django_ledger:je-list' entity_slug=view.kwargs.entity_slug ledger_pk=view.kwargs.ledger_pk %}"
-                       class="button is-small is-dark is-fullwidth">Back</a>
+                       class="button is-small is-dark is-fullwidth">{% trans 'Back' %}</a>
                 </form>
             </div>
         </div>

@@ -2,12 +2,12 @@
     <table class="table is-narrow is-fullwidth is-bordered django-ledger-table-bottom-margin-75">
         <thead>
         <tr class="has-text-centered is-error">
-            <th>Dated Posted</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Map To</th>
-            <th>TX</th>
-            <th>Actions</th>
+            <th>{% trans 'Dated Posted' %}</th>
+            <th>{% trans 'Description' %}</th>
+            <th>{% trans 'Amount' %}</th>
+            <th>{% trans 'Map To' %}</th>
+            <th>{% trans 'TX' %}</th>
+            <th>{% trans 'Actions' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                 <td>{{ imported_tx.earnings_account }}</td>
                 <td>{{ imported_tx.tx }}</td>
                 <td class="has-text-centered">
-                    <a href="" class="button is-small is-primary">View</a>
+                    <a href="" class="button is-small is-primary">{% trans 'View' %}</a>
                 </td>
             </tr>
         {% endfor %}

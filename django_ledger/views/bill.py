@@ -26,6 +26,7 @@ from django_ledger.forms.bill import (BillModelCreateForm, BaseBillModelUpdateFo
 from django_ledger.models import EntityModel, PurchaseOrderModel, EstimateModel
 from django_ledger.models.bill import BillModel
 from django_ledger.views.mixins import DjangoLedgerSecurityMixIn
+from django.utils.translation import gettext_lazy as _
 
 
 class BillModelListView(DjangoLedgerSecurityMixIn, ArchiveIndexView):
@@ -255,7 +256,7 @@ class BillModelDetailView(DjangoLedgerSecurityMixIn, DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         bill_model: BillModel = self.object
-        title = f'Bill {bill_model.bill_number}'
+        title = _('Bill %s') % bill_model.bill_number
         context['page_title'] = title
         context['header_title'] = title
 
@@ -271,10 +272,10 @@ class BillModelDetailView(DjangoLedgerSecurityMixIn, DetailView):
             <a href="{reverse("django_ledger:bill-update", kwargs={
                 'entity_slug': self.kwargs['entity_slug'],
                 'bill_pk': bill_model.uuid
-            })}">here</a>
+            })}">_(here)</a>
             """)
-            msg = f'Bill {bill_model.bill_number} has not been fully set up. ' + \
-                  f'Please update or assign associated accounts {link}.'
+            msg = (_('Bill %s has not been fully set up. ') % bill_model.bill_number) + \
+                  (_('Please update or assign associated accounts %s.') % link)
             messages.add_message(self.request,
                                  message=msg,
                                  level=messages.WARNING,
@@ -345,7 +346,7 @@ class BillModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
         bill_model: BillModel = self.object
         ledger_model = bill_model.ledger
 
-        title = f'Bill {bill_model.bill_number}'
+        title = _('Bill %s') % bill_model.bill_number
         context['page_title'] = title
         context['header_title'] = title
         context['header_subtitle'] = bill_model.get_bill_status_display()
@@ -374,7 +375,7 @@ class BillModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
         if not ledger_model.posted:
             messages.add_message(self.request,
                                  messages.INFO,
-                                 f'This bill has not been posted. Must post to see ledger changes.',
+                                 _('This bill has not been posted. Must post to see ledger changes.'),
                                  extra_tags='is-info')
 
         if not itemtxs_formset:

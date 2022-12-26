@@ -247,7 +247,7 @@ class EstimateModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
                     ])
 
                     messages.add_message(request,
-                                         message=f'Customer estimate items saved.',
+                                         message=_('Customer estimate items saved.'),
                                          level=messages.SUCCESS,
                                          extra_tags='is-success')
 

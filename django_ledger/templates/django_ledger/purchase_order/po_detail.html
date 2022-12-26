@@ -28,8 +28,7 @@
             <nav class="level">
                 <div class="level-item has-text-centered">
                     <div>
-                        <p class="heading">{% trans 'PO Amount' %}:
-                        <p class="title">
+                        <p class="heading">{% trans 'PO Amount' %}:<p class="title">
                             {% currency_symbol %}{{ po_model.po_amount | absolute | currency_format }}</p>
                     </div>
                 </div>
@@ -52,7 +51,7 @@
                 </div>
 
                 <div class=" column is-12">
-                    {% include 'django_ledger/includes/card_markdown.html' with style='card_1'  title='PO Notes' notes_html=po_model.notes_html %}
+                    {% include 'django_ledger/includes/card_markdown.html' with style='card_1'  title=_('PO Notes') notes_html=po_model.notes_html %}
                 </div>
             </div>
         </div>

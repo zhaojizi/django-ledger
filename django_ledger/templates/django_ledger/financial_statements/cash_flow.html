@@ -33,7 +33,7 @@
                         <h2 class="is-size-2 has-text-weight-light">
                             {% if quarter %}{{ year }} | Q{{ quarter }}
                                 {% elif month %}{{ start_date | date:'F, Y' }}
-                            {% else %}Fiscal Year {{ year }}
+                            {% else %}{% trans 'Fiscal Year' %} {{ year }}
                             {% endif %}</h2>
                         <h3 class="is-size-4 is-italic has-font-weight-light">
                             {{ from_date | date:'m/d/Y' }} - {{ to_date | date:'m/d/Y' }}

@@ -4,13 +4,13 @@
 <div class="table-container">
     <table class="table is-fullwidth is-narrow is-striped">
         <tr>
-            <th>Account Number</th>
-            <th>Description</th>
+            <th>{% trans 'Account Number' %}</th>
+            <th>{% trans 'Description' %}</th>
             {% if by_unit %}
-                <th>Unit</th>
+                <th>{% trans 'Unit' %}</th>
             {% endif %}
-            <th>Balance Type</th>
-            <th>Balance</th>
+            <th>{% trans 'Balance Type' %}</th>
+            <th>{% trans 'Balance' %}</th>
         </tr>
         <tr>
             <td><h2 class="is-size-3">{% trans 'Income' %}</h2></td>
@@ -39,7 +39,7 @@
             </tr>
         {% endfor %}
         <tr class="has-text-weight-bold">
-            <td>Total Income</td>
+            <td>{% trans 'Total Income' %}</td>
             <td></td>
             {% if by_unit %}
                 <td></td>
@@ -76,7 +76,7 @@
             </tr>
         {% endfor %}
         <tr class="has-text-weight-bold">
-            <td>Total Expenses</td>
+            <td>{% trans 'Total Expenses' %}</td>
             <td></td>
             {% if by_unit %}
                 <td></td>
@@ -86,7 +86,7 @@
         </tr>
 
         <tr class="has-text-weight-bold">
-            <td>Total Income (Loss)</td>
+            <td>{% trans 'Total Income (Loss)' %}</td>
             <td></td>
             {% if by_unit %}
                 <td></td>

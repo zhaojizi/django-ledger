@@ -165,7 +165,7 @@ class ItemModelAbstract(MP_Node, CreateUpdateMixIn):
 
     uuid = models.UUIDField(default=uuid4, editable=False, primary_key=True)
     name = models.CharField(max_length=100, verbose_name=_('Item Name'))
-    item_type = models.CharField(max_length=1, choices=ITEM_CHOICES, null=True, blank=True)
+    item_type = models.CharField(max_length=1, choices=ITEM_CHOICES, null=True, blank=True, verbose_name=_('Item Type'))
 
     uom = models.ForeignKey('django_ledger.UnitOfMeasureModel',
                             verbose_name=_('Unit of Measure'),
@@ -271,12 +271,14 @@ class ItemModelAbstract(MP_Node, CreateUpdateMixIn):
 
     def __str__(self):
         if self.is_expense():
-            return f'Expense Item: {self.name} | {self.get_item_type_display()}'
+            return f'{_("Expense Item:")} {self.name} | {self.get_item_type_display()}'
         elif self.is_inventory():
-            return f'Inventory: {self.name} | {self.get_item_type_display()}'
+            return f'{_("Inventory:")} {self.name} | {self.get_item_type_display()}'
         elif self.is_product_or_service:
-            return f'Product/Service: {self.name} | {self.get_item_type_display()}'
-        return f'Item Model: {self.name} - {self.sku} | {self.get_item_type_display()}'
+            return f'{_("Product/Service:")} {self.name} | {self.get_item_type_display()}'
+        return f'{_("Item Model:")} {self.name} - {self.sku} | {self.get_item_type_display()}'
+
+    # def add_root(cls, **kwargs):
 
     def is_expense(self):
         return self.is_product_or_service is False and self.for_inventory is False
@@ -320,7 +322,7 @@ class ItemModelAbstract(MP_Node, CreateUpdateMixIn):
             return DJANGO_LEDGER_INVENTORY_NUMBER_PREFIX
         elif self.is_product():
             return DJANGO_LEDGER_PRODUCT_NUMBER_PREFIX
-        raise ValidationError('Cannot determine Item Number prefix for ItemModel')
+        raise ValidationError(_('Cannot determine Item Number prefix for ItemModel'))
 
     def can_generate_item_number(self) -> bool:
         return all([
@@ -727,14 +729,14 @@ class ItemTransactionModelAbstract(CreateUpdateMixIn):
         # amount = f'{currency_symbol}{self.total_amount}'
         if self.po_model_id:
             po_status_display = self.get_po_item_status_display()
-            return f'PO Model: {self.po_model_id} | {po_status_display} | {self.po_total_amount}'
+            return f'{_("PO Model:")} {self.po_model_id} | {po_status_display} | {self.po_total_amount}'
         elif self.bill_model_id:
-            return f'Bill Model: {self.bill_model_id} | {self.total_amount}'
+            return f'{_("Bill Model:")} {self.bill_model_id} | {self.total_amount}'
         elif self.invoice_model_id:
-            return f'Invoice Model: {self.invoice_model_id} | {self.total_amount}'
+            return f'{_("Invoice Model:")} {self.invoice_model_id} | {self.total_amount}'
         elif self.ce_model_id:
-            return f'Estimate/Contract Model: {self.ce_model_id} | {self.ce_cost_estimate}'
-        return f'Orphan {self.__class__.__name__}: {self.uuid}'
+            return f'{_("Estimate/Contract Model:")} {self.ce_model_id} | {self.ce_cost_estimate}'
+        return f'{_("Orphan")} {self.__class__.__name__}: {self.uuid}'
 
     def is_received(self):
         return self.po_item_status == self.STATUS_RECEIVED
@@ -791,19 +793,15 @@ class ItemTransactionModelAbstract(CreateUpdateMixIn):
             if self.for_po():
 
                 if self.quantity > self.po_quantity:
-                    raise ValidationError(f'Billed quantity {self.quantity} cannot be greater than '
-                                          f'PO quantity {self.po_quantity}')
+                    raise ValidationError(_('Billed quantity %s cannot be greater than PO quantity %s') % (self.quantity,self.po_quantity))
                 if self.total_amount > self.po_total_amount:
-                    raise ValidationError(f'Item amount {self.total_amount} cannot exceed authorized '
-                                          f'PO amount {self.po_total_amount}')
+                    raise ValidationError(_('Item amount %s cannot exceed authorized PO amount %s') % (self.total_amount,self.po_total_amount))
 
                 if self.total_amount > self.po_total_amount:
                     # checks if difference is within tolerance...
                     diff = self.total_amount - self.po_total_amount
                     if diff > DJANGO_LEDGER_TRANSACTION_MAX_TOLERANCE:
-                        raise ValidationError(
-                            f'Difference between PO Amount {self.po_total_amount} and Bill {self.total_amount} '
-                            f'exceeds tolerance of {DJANGO_LEDGER_TRANSACTION_MAX_TOLERANCE}')
+                        raise ValidationError(_('Difference between PO Amount %s and Bill %s exceeds tolerance of %s') % (self.po_total_amount,self.total_amount,DJANGO_LEDGER_TRANSACTION_MAX_TOLERANCE))
                     self.total_amount = self.po_total_amount
                     return
 

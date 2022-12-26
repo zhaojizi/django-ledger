@@ -163,7 +163,7 @@ class PurchaseOrderModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
     def get_context_data(self, itemtxs_formset=None, **kwargs):
         context = super().get_context_data(**kwargs)
         po_model: PurchaseOrderModel = self.object
-        title = f'Purchase Order {po_model.po_number}'
+        title = f'{_("Purchase Order")} {po_model.po_number}'
         context['page_title'] = title
         context['header_title'] = title
 
@@ -328,8 +328,7 @@ class PurchaseOrderModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
                 if not all([i.bill_model for i in po_items_qs]):
                     messages.add_message(self.request,
                                          messages.ERROR,
-                                         f'All PO items must be billed before marking'
-                                         f' PO: {po_model.po_number} as fulfilled.',
+                                         _('All PO items must be billed before marking PO: $s as fulfilled.') % po_model.po_number,
                                          extra_tags='is-danger')
                     return self.get(self.request)
 
@@ -337,8 +336,7 @@ class PurchaseOrderModelUpdateView(DjangoLedgerSecurityMixIn, UpdateView):
                     if not all([i.bill_model.is_paid() for i in po_items_qs]):
                         messages.add_message(self.request,
                                              messages.SUCCESS,
-                                             f'All bills must be paid before marking'
-                                             f' PO: {po_model.po_number} as fulfilled.',
+                                             _('All bills must be paid before marking PO: %s as fulfilled.') % po_model.po_number,
                                              extra_tags='is-success')
                         return self.get(self.request)
 
@@ -365,7 +363,7 @@ class PurchaseOrderModelDetailView(DjangoLedgerSecurityMixIn, DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
         po_model: PurchaseOrderModel = self.object
-        title = f'Purchase Order {po_model.po_number}'
+        title = f'{_("Purchase Order")} {po_model.po_number}'
         context['page_title'] = title
         context['header_title'] = title
 

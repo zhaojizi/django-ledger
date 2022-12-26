@@ -16,12 +16,12 @@
                 <div class="column is-12">
                     <table class="table is-fullwidth is-narrow is-striped is-bordered">
                         <tr>
-                            <th>Account</th>
-                            <th>TX Type</th>
-                            <th>Amount</th>
-                            <th>Description</th>
+                            <th>{% trans 'Account' %}</th>
+                            <th>{% trans 'TX Type' %}</th>
+                            <th>{% trans 'Amount' %}</th>
+                            <th>{% trans 'Description' %}</th>
                             {% if txs_formset.can_delete %}
-                                <th>Delete</th>
+                                <th>{% trans 'Delete' %}</th>
                             {% endif %}
                         </tr>
                         {% for f in txs_formset %}
@@ -46,9 +46,9 @@
                     </table>
                 </div>
                 <div class="column is-12 has-text-centered">
-                    <button class="button is-primary is-outlined">Save</button>
+                    <button class="button is-primary is-outlined">{% trans 'Save' %}</button>
                     <a class="button is-dark"
-                       href="{% url "django_ledger:je-list" entity_slug=view.kwargs.entity_slug ledger_pk=view.kwargs.ledger_pk %}">Done</a>
+                       href="{% url "django_ledger:je-list" entity_slug=view.kwargs.entity_slug ledger_pk=view.kwargs.ledger_pk %}">{% trans 'Done' %}</a>
                 </div>
             </div>
         </form>

@@ -5,12 +5,12 @@
     <table class="table is-fullwidth is-narrow is-striped mb-3 django-ledger-table-bottom-margin-75">
         <thead>
         <tr>
-            <th>Status</th>
-            <th>Description</th>
-            <th>Ledger</th>
-            <th>Created</th>
-            <th>Completed</th>
-            <th>Actions</th>
+            <th>{% trans 'Status' %}</th>
+            <th>{% trans 'Description' %}</th>
+            <th>{% trans 'Ledger' %}</th>
+            <th>{% trans 'Created' %}</th>
+            <th>{% trans 'Completed' %}</th>
+            <th>{% trans 'Actions' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -34,7 +34,7 @@
                                     aria-haspopup="true"
                                     onclick="djLedger.toggleDropdown('customer-action-{{ job.uuid }}')"
                                     aria-controls="dropdown-menu">
-                                <span>Actions</span>
+                                <span>{% trans 'Actions' %}</span>
                                 <span class="icon is-small">{% icon 'bi:arrow-down' 24 %}</span>
                             </button>
                         </div>

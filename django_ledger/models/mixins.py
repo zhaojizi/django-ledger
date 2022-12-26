@@ -272,14 +272,14 @@ class LedgerWrapperMixIn(models.Model):
         ledger_model = self.ledger
         if ledger_model.locked:
             if raise_exception:
-                raise ValidationError(f'Bill ledger {ledger_model.name} is already locked...')
+                raise ValidationError(_('Bill ledger %s is already locked...') % ledger_model.name)
         ledger_model.lock(commit)
 
     def unlock_ledger(self, commit: bool = False, raise_exception: bool = True, **kwargs):
         ledger_model = self.ledger
         if not ledger_model.locked:
             if raise_exception:
-                raise ValidationError(f'Bill ledger {ledger_model.name} is already unlocked...')
+                raise ValidationError(_('Bill ledger %s is already unlocked...') % ledger_model.name)
         ledger_model.unlock(commit)
 
     # POST/UNPOST Ledger...
@@ -287,14 +287,14 @@ class LedgerWrapperMixIn(models.Model):
         ledger_model = self.ledger
         if ledger_model.posted:
             if raise_exception:
-                raise ValidationError(f'Bill ledger {ledger_model.name} is already posted...')
+                raise ValidationError(_('Bill ledger %s is already posted...') % ledger_model.name)
         ledger_model.post(commit)
 
     def unpost_ledger(self, commit: bool = False, raise_exception: bool = True, **kwargs):
         ledger_model = self.ledger
         if not ledger_model.posted:
             if raise_exception:
-                raise ValidationError(f'Bill ledger {ledger_model.name} is not posted...')
+                raise ValidationError(_('Bill ledger %s is not posted...') % ledger_model.name)
         ledger_model.post(commit)
 
     def migrate_state(self,
@@ -559,13 +559,13 @@ class LedgerWrapperMixIn(models.Model):
             self.amount_due = 0
 
         if self.cash_account_id is None:
-            raise ValidationError('Must provide a cash account.')
+            raise ValidationError(_('Must provide a cash account.'))
 
         if self.accrue:
             if not self.prepaid_account_id:
-                raise ValidationError(f'Accrued {self.__class__.__name__} must define a Prepaid Expense account.')
+                raise ValidationError(_('Accrued %s must define a Prepaid Expense account.') % self.__class__.__name__)
             if not self.unearned_account_id:
-                raise ValidationError(f'Accrued {self.__class__.__name__} must define an Unearned Income account.')
+                raise ValidationError(_('Accrued %s must define an Unearned Income account.') % self.__class__.__name__)
 
         if any([
             self.cash_account_id is not None,
@@ -577,22 +577,22 @@ class LedgerWrapperMixIn(models.Model):
                 self.prepaid_account_id is not None,
                 self.unearned_account_id is not None
             ]):
-                raise ValidationError('Must provide all accounts Cash, Prepaid, UnEarned.')
+                raise ValidationError(_('Must provide all accounts Cash, Prepaid, UnEarned.'))
             # pylint: disable=no-member
             if self.cash_account.role != ASSET_CA_CASH:
-                raise ValidationError(f'Cash account must be of role {ASSET_CA_CASH}.')
+                raise ValidationError(_('Cash account must be of role %s.') % ASSET_CA_CASH)
             # pylint: disable=no-member
             if self.prepaid_account.role != ASSET_CA_PREPAID:
-                raise ValidationError(f'Prepaid account must be of role {ASSET_CA_PREPAID}.')
+                raise ValidationError(_('Prepaid account must be of role %s.') % ASSET_CA_PREPAID)
             # pylint: disable=no-member
             if self.unearned_account.role != LIABILITY_CL_DEFERRED_REVENUE:
-                raise ValidationError(f'Unearned account must be of role {LIABILITY_CL_DEFERRED_REVENUE}.')
+                raise ValidationError(_('Unearned account must be of role %s.') % LIABILITY_CL_DEFERRED_REVENUE)
 
         if self.accrue and self.progress is None:
             self.progress = 0
 
         if self.amount_paid > self.amount_due:
-            raise ValidationError(f'Amount paid {self.amount_paid} cannot exceed amount due {self.amount_due}')
+            raise ValidationError(_('Amount paid %s cannot exceed amount due %s') % (self.amount_paid,self.amount_due))
 
         if self.is_paid():
             self.progress = Decimal(1.0)
@@ -602,7 +602,7 @@ class LedgerWrapperMixIn(models.Model):
             if not self.date_paid:
                 self.date_paid = today
             if self.date_paid > today:
-                raise ValidationError(f'Cannot pay {self.__class__.__name__} in the future.')
+                raise ValidationError(_('Cannot pay %s in the future.') % self.__class__.__name__)
         else:
             self.date_paid = None
 
@@ -613,7 +613,7 @@ class LedgerWrapperMixIn(models.Model):
                 self.amount_unearned,
                 self.amount_receivable
             ]):
-                raise ValidationError('Voided element cannot have any balance.')
+                raise ValidationError(_('Voided element cannot have any balance.'))
 
             self.progress = 0
 
@@ -632,10 +632,10 @@ class PaymentTermsMixIn(models.Model):
     TERMS_NET_90_PLUS = 'net_90+'
 
     TERMS = [
-        (TERMS_ON_RECEIPT, 'Due On Receipt'),
-        (TERMS_NET_30, 'Net 30 Days'),
-        (TERMS_NET_60, 'Net 60 Days'),
-        (TERMS_NET_90, 'Net 90 Days'),
+        (TERMS_ON_RECEIPT, _('Due On Receipt')),
+        (TERMS_NET_30, _('Net 30 Days')),
+        (TERMS_NET_60, _('Net 60 Days')),
+        (TERMS_NET_90, _('Net 90 Days')),
     ]
 
     terms = models.CharField(max_length=10,

@@ -5,14 +5,14 @@
     <table class="table is-fullwidth is-narrow is-striped is-bordered django-ledger-table-bottom-margin-75">
         <thead>
         <tr>
-            <th>Invoice Number</th>
-            <th>Status Date</th>
-            <th>Status</th>
-            <th>Invoiced To</th>
-            <th>Amount</th>
-            <th>Payments</th>
-            <th>Past Due?</th>
-            <th>Actions</th>
+            <th>{% trans 'Invoice Number' %}</th>
+            <th>{% trans 'Status Date' %}</th>
+            <th>{% trans 'Status' %}</th>
+            <th>{% trans 'Invoiced To' %}</th>
+            <th>{% trans 'Amount' %}</th>
+            <th>{% trans 'Payments' %}</th>
+            <th>{% trans 'Past Due?' %}</th>
+            <th>{% trans 'Actions' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -44,9 +44,9 @@
                         <div class="dropdown-menu" id="dropdown-menu-{{ invoice.uuid }}" role="menu">
                             <div class="dropdown-content">
                                 <a href="{% url 'django_ledger:invoice-detail' entity_slug=entity_slug invoice_pk=invoice.uuid %}"
-                                   class="dropdown-item has-text-success">Details</a>
+                                   class="dropdown-item has-text-success">{% trans 'Details' %}</a>
                                 <a href="{% url 'django_ledger:invoice-update' entity_slug=entity_slug invoice_pk=invoice.uuid %}"
-                                   class="dropdown-item has-text-success">Update</a>
+                                   class="dropdown-item has-text-success">{% trans 'Update' %}</a>
                             </div>
                         </div>
                     </div>

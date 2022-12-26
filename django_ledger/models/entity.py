@@ -151,7 +151,8 @@ class EntityReportMixIn:
             * 4 -> April.
             * 9 -> September.
         """
-        fy: int = getattr(self, 'fy_start_month')
+        return 11
+        fy: int = getattr(self.object, 'fy_start_month')
         return fy
 
     def validate_quarter(self, quarter: int):
@@ -166,12 +167,12 @@ class EntityReportMixIn:
             The quarter number to validate.
 
         Raises
-        ------
+        ______
         ValidationError
             If quarter is not valid.
         """
         if quarter not in self.VALID_QUARTERS:
-            raise ValidationError(f'Specified quarter is not valid: {quarter}')
+            raise ValidationError(_('Specified quarter is not valid: %s') % quarter)
 
     def validate_month(self, month: int):
         """
@@ -185,13 +186,12 @@ class EntityReportMixIn:
             The month number to validate.
 
         Raises
-        ------
-
+        ______
         ValidationError
             If month is not valid.
         """
         if month not in self.VALID_MONTHS:
-            raise ValidationError(f'Specified month is not valid: {month}')
+            raise ValidationError(_('Specified month is not valid: %s') % month)
 
     def get_fy_start(self, year: int, fy_start_month: Optional[int] = None) -> date:
         """
@@ -493,7 +493,7 @@ class EntityModelAbstract(MP_Node,
         ]
 
     def __str__(self):
-        return f'EntityModel: {self.name}'
+        return f'{_("EntityModel:")} {self.name}'
 
     @staticmethod
     def generate_slug_from_name(name: str) -> str:
@@ -546,8 +546,7 @@ class EntityModelAbstract(MP_Node,
                 'updated'
             ])
 
-    def recorded_inventory(self,
-                           user_model,
+    def recorded_inventory(self, user_model,
                            item_qs: Optional[ItemModelQuerySet] = None,
                            as_values: bool = True) -> ItemModelQuerySet:
         """
@@ -555,6 +554,7 @@ class EntityModelAbstract(MP_Node,
         inventory. Once inventory is marked as "received" recorded inventory of each item is updated by calling
         :func:`update_inventory <django_ledger.models.entity.EntityModelAbstract.update_inventory>`.
         This function returns relevant values of the recoded inventory, including Unit of Measures.
+
 
         Parameters
         ----------
@@ -594,7 +594,7 @@ class EntityModelAbstract(MP_Node,
         Parameters
         ----------
         counted_qs: ItemTransactionModelQuerySet
-            Inventory recount queryset from Purchase Order received inventory.
+            Inventory recount queryset from Purchase Order  received inventory.
             See :func:`ItemTransactionModelManager.inventory_count
             <django_ledger.models.item.ItemTransactionModelManager.inventory_count>`.
             Expects ItemTransactionModelQuerySet to be formatted "as values".
@@ -797,8 +797,7 @@ class EntityModelAbstract(MP_Node,
                 logger.info(msg=f'Adding Account {acc.code}: {acc.name}...')
                 AccountModel.add_root(instance=acc)
         else:
-            raise ValidationError(f'Entity {self.name} already has existing accounts. '
-                                  'Use force=True to bypass this check')
+            raise ValidationError(_('Entity %s already has existing accounts.Use force=True to bypass this check') % self.name)
 
     def get_accounts(self, user_model, active_only: bool = True):
         """
@@ -847,9 +846,7 @@ class EntityModelAbstract(MP_Node,
 
         else:
             raise ValidationError(
-                message=f'Both cash_account and equity account must be an instance of str or AccountMode.'
-                        f' Got. Cash Account: {cash_account.__class__.__name__} and '
-                        f'Equity Account: {equity_account.__class__.__name__}'
+                message=_('Both cash_account and equity account must be an instance of str or AccountMode. Got. Cash Account: %s and cash_account.__class__.__name__Equity Account: %s' % [cash_account.__class__.__name__,equity_account.__class__.__name__])
             )
 
         txs = list()

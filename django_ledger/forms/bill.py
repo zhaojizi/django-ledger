@@ -74,7 +74,7 @@ class BillModelCreateForm(ModelForm):
                 'id': 'djl-bill-amount-due-input'}),
             'xref': TextInput(attrs={
                 'class': DJANGO_LEDGER_FORM_INPUT_CLASSES + ' is-large',
-                'placeholder': 'External Reference Number...',
+                'placeholder': _('External Reference Number...'),
                 'id': 'djl-bill-xref-input'
             }),
             'terms': Select(attrs={
@@ -132,7 +132,7 @@ class BaseBillModelUpdateForm(BillModelCreateForm):
         ]
         widgets = {
             'xref': TextInput(attrs={'class': DJANGO_LEDGER_FORM_INPUT_CLASSES,
-                                     'placeholder': 'External Reference...'}),
+                                     'placeholder': _('External Reference...')}),
             'date': DateInput(attrs={'class': DJANGO_LEDGER_FORM_INPUT_CLASSES}),
             'amount_due': TextInput(attrs={'class': DJANGO_LEDGER_FORM_INPUT_CLASSES, 'placeholder': '$$$'}),
             'terms': Select(attrs={'class': DJANGO_LEDGER_FORM_INPUT_CLASSES}),
@@ -232,7 +232,7 @@ class BillItemTransactionForm(ModelForm):
         if itemtxs_model.po_model is not None:
             quantity = cleaned_data['quantity']
             if quantity > itemtxs_model.po_quantity:
-                raise ValidationError(f'Cannot bill more than {itemtxs_model.po_quantity} authorized.')
+                raise ValidationError(_('Cannot bill more than %s authorized.') % itemtxs_model.po_quantity)
         return cleaned_data
 
     class Meta:

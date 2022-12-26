@@ -27,8 +27,7 @@
                     <nav class="level">
                         <div class="level-item has-text-centered">
                             <div>
-                                <p class="heading">Cash Account:
-                                    <a href="{% url 'django_ledger:account-detail' account_pk=invoice.cash_account.uuid entity_slug=view.kwargs.entity_slug %}"
+                                <p class="heading">{% trans 'Cash Account:' %}<a href="{% url 'django_ledger:account-detail' account_pk=invoice.cash_account.uuid entity_slug=view.kwargs.entity_slug %}"
                                        class="has-text-danger">{{ invoice.cash_account.code }}</a>
                                 <p class="title">
                                     {% currency_symbol %}{{ invoice.get_amount_cash | absolute | currency_format }}</p>
@@ -38,8 +37,7 @@
                         {% if invoice.accrue %}
                             <div class="level-item has-text-centered">
                                 <div>
-                                    <p class="heading">Prepaid Account:
-                                        <a href="{% url 'django_ledger:account-detail' account_pk=invoice.prepaid_account.uuid entity_slug=view.kwargs.entity_slug %}"
+                                    <p class="heading">{% trans 'Prepaid Account:' %}<a href="{% url 'django_ledger:account-detail' account_pk=invoice.prepaid_account.uuid entity_slug=view.kwargs.entity_slug %}"
                                            class="has-text-danger">{{ invoice.prepaid_account.code }}</a>
                                     </p>
                                     <p class="title has-text-success">
@@ -48,8 +46,7 @@
                             </div>
                             <div class="level-item has-text-centered">
                                 <div>
-                                    <p class="heading">Unearned Account:
-                                        <a href="{% url 'django_ledger:account-detail' account_pk=invoice.unearned_account.uuid entity_slug=view.kwargs.entity_slug %}"
+                                    <p class="heading">{% trans 'Unearned Account:' %}<a href="{% url 'django_ledger:account-detail' account_pk=invoice.unearned_account.uuid entity_slug=view.kwargs.entity_slug %}"
                                            class="has-text-danger">{{ invoice.unearned_account.code }}</a>
 
                                     </p>
@@ -60,7 +57,7 @@
 
                             <div class="level-item has-text-centered">
                                 <div>
-                                    <p class="heading">Accrued {{ invoice.get_progress_percent }}%</p>
+                                    <p class="heading">{% trans 'Accrued ' %}{{ invoice.get_progress_percent }}%</p>
                                     <p class="title">
                                         {% currency_symbol %}{{ invoice.get_amount_earned | currency_format }}</p>
                                 </div>
@@ -68,7 +65,7 @@
                         {% else %}
                             <div class="level-item has-text-centered">
                                 <div>
-                                    <p class="heading">You Still Owe</p>
+                                    <p class="heading">{% trans 'You Still Owe' %}</p>
                                     <p class="title has-text-danger">
                                         {% currency_symbol %}{{ invoice.get_amount_open | currency_format }}</p>
                                 </div>
@@ -138,7 +135,7 @@
                     </div>
                 </div>
                 <div class="column is-12">
-                    {% include 'django_ledger/includes/card_markdown.html' with style='card_1'  title='Invoice Notes' notes_html=invoice.notes_html %}
+                    {% include 'django_ledger/includes/card_markdown.html' with style='card_1'  title=_('Invoice Notes') notes_html=invoice.notes_html %}
                 </div>
             </div>
         </div>

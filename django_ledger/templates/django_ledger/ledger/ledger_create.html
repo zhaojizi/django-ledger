@@ -11,10 +11,9 @@
                       method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="button is-primary is-outlined is-fullwidth djetler_my_1">Create
-                    </button>
+                    <button type="submit" class="button is-primary is-outlined is-fullwidth djetler_my_1">{% trans 'Create' %}</button>
                     <a href="{% url 'django_ledger:ledger-list' entity_slug=view.kwargs.entity_slug %}"
-                       class="button is-small is-dark is-fullwidth">Back</a>
+                       class="button is-small is-dark is-fullwidth">{% trans 'Back' %}</a>
                 </form>
             </div>
         </div>

@@ -185,9 +185,7 @@ class DataImportJobDetailView(DjangoLedgerSecurityMixIn, DetailView):
             messages.add_message(
                 self.request,
                 messages.ERROR,
-                mark_safe(f'Warning! No cash account has been set for {job_model.ledger.bankaccountmodel}. '
-                          f'Importing has been disabled until Cash Account is assigned. '
-                          f'Click <a href="{bank_acct_url}">here</a> to assign'),
+                mark_safe(_('Warning! No cash account has been set for %s.Importing has been disabled until Cash Account is assigned.Click <a href="%s">%s</a> to assign') % (job_model.ledger.bankaccountmodel,bank_acct_url,_("here"))),
                 extra_tags='is-danger'
             )
 

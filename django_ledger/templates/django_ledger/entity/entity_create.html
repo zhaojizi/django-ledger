@@ -21,10 +21,9 @@
                     <div class="card-content">
                         {{ form.as_p }}
                         <button type="submit"
-                                class="button is-primary is-outlined is-fullwidth djetler_my_1">Create
-                        </button>
+                                class="button is-primary is-outlined is-fullwidth djetler_my_1">{% trans 'Create' %}</button>
                         <a href="{% url 'django_ledger:home' %}"
-                           class="button is-small is-dark is-fullwidth">Back</a>
+                           class="button is-small is-dark is-fullwidth">{% trans 'Back' %}</a>
                     </div>
                 </div>
             </div>
